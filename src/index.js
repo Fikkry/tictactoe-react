@@ -47,6 +47,7 @@ class Board extends React.Component {
   renderSquare(i) {
     return (
       <Square
+        key={i}
         color={this.props.color}
         number={i}
         value={this.props.squares[i]}
@@ -55,26 +56,45 @@ class Board extends React.Component {
     )
   }
 
+  squares() {
+    let squares = []
+    for (let i = 0; i <= 8; i++) {
+      squares.push(this.renderSquare(i))
+    }
+
+    return squares
+  }
+
+  getSquare(squareRow) {
+    let squares = []
+    if (squareRow === 0) {
+      squares.push(this.squares()[0], this.squares()[1], this.squares()[2])
+    } else if (squareRow === 1) {
+      squares.push(this.squares()[3], this.squares()[4], this.squares()[5])
+    } else {
+      squares.push(this.squares()[6], this.squares()[7], this.squares()[8])
+    }
+
+    return squares
+  }
+
+  boards() {
+    let squareRow
+    let boards = []
+    for (let i = 0; i <= 2; i++) {
+      squareRow = i
+      boards.push(
+        <div className="board-row" key={i}>
+          {this.getSquare(squareRow)}
+        </div>,
+      )
+    }
+
+    return boards
+  }
+
   render() {
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    )
+    return <div>{this.boards()}</div>
   }
 }
 
